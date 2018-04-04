@@ -25,20 +25,24 @@ RUN apt-get update && \
     libxrender1 fonts-dejavu pandoc \
     libgsl-dev coinor-libipopt-dev \
     libboost-all-dev \
-    python3-dev python3-all python3-all-dev python3-pip \
+    python3-dev python3-pip python3-setuptools python3-wheel \
     valgrind doxygen scons xorg-dev libgl1-mesa-dev libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev \
-    libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev ffmpeg && \
+    libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev ffmpeg phantomjs && \
     wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - && \
     echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" | tee -a /etc/apt/sources.list && \
-    add-apt-repository --yes ppa:ubuntu-toolchain-r/test && \
     apt-get update && apt-get --quiet --assume-yes --no-install-recommends install \
         clang-6.0 libllvm6.0 lldb-6.0 llvm-6.0 llvm-6.0-dev llvm-6.0-runtime clang-format-6.0 \
         python-clang-6.0 && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist \
             numpy numpydoc scipy statsmodels sympy matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
             tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib \
             sphinx sphinx_rtd_theme argh rstcheck mako bottle sqlalchemy CherryPy Nikola[extras] && \
+    python3 -m ipykernel install && \
+    mkdir -p /root/.config/matplotlib/ && \
+    echo "backend: Agg" > /root/.config/matplotlib/matplotlibrc && \
+    python3 -c "import matplotlib.pyplot as plt" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
