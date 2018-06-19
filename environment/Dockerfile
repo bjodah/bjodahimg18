@@ -11,8 +11,8 @@ RUN apt-get update && \
     echo "path-exclude /usr/share/doc/*" >/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     echo "path-include /usr/share/doc/*/copyright" >>/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     apt-get upgrade -y && \
-    apt-get --assume-yes --no-install-recommends install wget curl unzip git build-essential cmake \
-    gfortran libtool flex bison binutils-dev liblapack-dev libicu-dev zlib1g-dev libbz2-dev \
+    apt-get --assume-yes --no-install-recommends install wget curl ssh time unzip git build-essential gfortran gdb \
+    libtool cmake flex bison binutils-dev liblapack-dev libicu-dev zlib1g-dev libbz2-dev \
     libyaml-dev libopenmpi-dev libgmp-dev libmpfr-dev libfreetype6-dev libpng-dev \
     libjpeg-dev libatlas-base-dev libzmq3-dev libxslt1-dev libxml2-dev \
     texlive-generic-recommended texlive-latex-recommended texlive-science texlive-fonts-recommended \
@@ -22,12 +22,13 @@ RUN apt-get update && \
     expect xutils-dev \
     libfontconfig1 imagemagick \
     python-rdkit librdkit1 rdkit-data \ 
-    libxrender1 fonts-dejavu pandoc \
+    libxrender1 fonts-dejavu fonts-humor-sans pandoc \
     libgsl-dev coinor-libipopt-dev \
     libboost-all-dev \
     python3-dev python3-pip python3-setuptools python3-wheel \
     valgrind doxygen scons xorg-dev libgl1-mesa-dev libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev \
     libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev ffmpeg phantomjs && \
+    apt-get -q -y build-dep sundials && \
     wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - && \
     echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" | tee -a /etc/apt/sources.list && \
     apt-get update && apt-get --quiet --assume-yes --no-install-recommends install \
@@ -38,7 +39,7 @@ RUN apt-get update && \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist \
             numpy numpydoc scipy statsmodels sympy matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
-            tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib \
+            tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image \
             sphinx sphinx_rtd_theme argh rstcheck mako bottle sqlalchemy CherryPy Nikola[extras] && \
     python3 -m ipykernel install && \
     mkdir -p /root/.config/matplotlib/ && \
