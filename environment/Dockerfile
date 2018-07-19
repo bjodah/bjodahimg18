@@ -24,7 +24,7 @@ RUN apt-get update && \
     python-rdkit librdkit1 rdkit-data \ 
     libxrender1 fonts-dejavu fonts-humor-sans pandoc \
     libgsl-dev coinor-libipopt-dev \
-    libboost-all-dev \
+    libboost-all-dev libsuitesparse-dev \
     python3-dev python3-pip python3-setuptools python3-wheel \
     valgrind doxygen scons xorg-dev libgl1-mesa-dev libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev \
     libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev ffmpeg phantomjs && \
