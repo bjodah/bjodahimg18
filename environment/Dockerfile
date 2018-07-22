@@ -39,7 +39,7 @@ RUN apt-get update && \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist \
             numpy numpydoc scipy statsmodels sympy matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
-            tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image \
+            tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image git-archive-all \
             sphinx sphinx_rtd_theme argh rstcheck mako bottle sqlalchemy CherryPy Nikola[extras] && \
     python3 -m ipykernel install && \
     mkdir -p /root/.config/matplotlib/ && \
