@@ -11,7 +11,7 @@ RUN apt-get update && \
     echo "path-exclude /usr/share/doc/*" >/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     echo "path-include /usr/share/doc/*/copyright" >>/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     apt-get upgrade -y && \
-    apt-get --assume-yes --no-install-recommends install wget curl ssh time unzip git build-essential gfortran gdb \
+    apt-get --assume-yes --no-install-recommends install wget curl ssh time zip unzip git build-essential gfortran gdb \
     libtool cmake flex bison binutils-dev liblapack-dev libicu-dev zlib1g-dev libbz2-dev \
     libyaml-dev libopenmpi-dev libgmp-dev libmpfr-dev libfreetype6-dev libpng-dev \
     libjpeg-dev libatlas-base-dev libzmq3-dev libxslt1-dev libxml2-dev \
