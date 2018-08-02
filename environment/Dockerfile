@@ -11,16 +11,16 @@ RUN apt-get update && \
     echo "path-exclude /usr/share/doc/*" >/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     echo "path-include /usr/share/doc/*/copyright" >>/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     apt-get upgrade -y && \
-    apt-get --assume-yes --no-install-recommends install wget curl ssh time zip unzip git build-essential gfortran gdb \
-    libtool cmake flex bison binutils-dev liblapack-dev libicu-dev zlib1g-dev libbz2-dev \
+    apt-get --assume-yes --no-install-recommends install git build-essential gfortran gfortran-8 gcc-8 g++-8 gdb \
+    libtool cmake flex bison binutils-dev liblapack-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev libncurses5-dev libreadline6-dev \
+    libsqlite3-dev libssl-dev libgdbm-dev tk8.5-dev lzma lzma-dev \
     libyaml-dev libopenmpi-dev libgmp-dev libmpfr-dev libfreetype6-dev libpng-dev \
-    libjpeg-dev libatlas-base-dev libzmq3-dev libxslt1-dev libxml2-dev \
+    libjpeg-dev libzmq3-dev libxslt1-dev libxml2-dev \
     texlive-generic-recommended texlive-latex-recommended texlive-science texlive-fonts-recommended \
     texlive-fonts-extra texlive-latex-extra texlive-lang-european lmodern texlive-bibtex-extra \
     texlive-xetex biber graphviz dot2tex dvipng latexmk sudo \
-    freeglut3-dev libglfw3-dev \
-    expect xutils-dev \
-    libfontconfig1 imagemagick \
+    freeglut3-dev libglfw3-dev xutils-dev libfontconfig1 \
+    wget curl ssh time zip unzip expect imagemagick  \
     python-rdkit librdkit1 rdkit-data \ 
     libxrender1 fonts-dejavu fonts-humor-sans pandoc \
     libgsl-dev coinor-libipopt-dev \
