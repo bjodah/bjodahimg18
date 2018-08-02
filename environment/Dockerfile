@@ -20,7 +20,7 @@ RUN apt-get update && \
     texlive-fonts-extra texlive-latex-extra texlive-lang-european lmodern texlive-bibtex-extra \
     texlive-xetex biber graphviz dot2tex dvipng latexmk sudo \
     freeglut3-dev libglfw3-dev xutils-dev libfontconfig1 \
-    wget curl ssh time zip unzip expect imagemagick  \
+    wget curl ssh time zip unzip expect imagemagick gnupg2 \
     python-rdkit librdkit1 rdkit-data \ 
     libxrender1 fonts-dejavu fonts-humor-sans pandoc \
     libgsl-dev coinor-libipopt-dev \
