@@ -42,5 +42,5 @@ RUN apt-get update && \
     python3 -c "import matplotlib.pyplot as plt" && \
     apt-get clean && \
     cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2 | tar xj && \
-    cd boost_1_68_0 && ./bootstrap.sh --prefix=/opt/boost_1_68_0 && ./b2 install && \
+    cd boost_1_68_0 && ./bootstrap.sh --prefix=/opt/boost_1_68_0 && ./b2 install >b2_build.log && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
