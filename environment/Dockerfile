@@ -12,11 +12,11 @@ RUN apt-get update && \
     echo "path-include /usr/share/doc/*/copyright" >>/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     apt-get upgrade -y && \
     apt-get --assume-yes --no-install-recommends install wget curl ssh gnupg2 time sudo expect zip unzip git \
-    build-essential gfortran gdb valgrind doxygen scons libtool cmake flex bison binutils-dev libreadline6-dev \
-    libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
+    build-essential gfortran gfortran-8 gcc-8 g++-8 gdb valgrind scons libtool cmake flex bison binutils-dev \
+    libreadline6-dev libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
     libssl-dev libgdbm-dev tk8.5-dev lzma lzma-dev libxslt1-dev libxml2-dev \
     liblapack-dev libopenmpi-dev libgmp-dev libmpfr-dev libgsl-dev coinor-libipopt-dev \
-    libboost-all-dev libsuitesparse-dev pandoc phantomjs \
+    libboost-all-dev libsuitesparse-dev doxygen pandoc phantomjs \
     libjpeg-dev libpng-dev libfreetype6-dev libfontconfig1 fonts-dejavu fonts-humor-sans imagemagick ffmpeg \
     xorg-dev xutils-dev libxrender1 freeglut3-dev libglfw3-dev libgl1-mesa-dev \
     libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev \
