@@ -22,7 +22,7 @@ RUN apt-get update && \
     libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev \
     texlive-generic-recommended texlive-latex-recommended texlive-science texlive-fonts-recommended \
     texlive-fonts-extra texlive-latex-extra texlive-lang-european lmodern texlive-bibtex-extra \
-    texlive-xetex biber graphviz dot2tex dvipng latexmk \
+    texlive-xetex biber graphviz libgraphviz-dev dot2tex dvipng latexmk \
     python3-dev python3-pip python3-setuptools python3-wheel && \
     wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - && \
     echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" | tee -a /etc/apt/sources.list && \
@@ -35,7 +35,8 @@ RUN apt-get update && \
             numpy numpydoc scipy statsmodels "sympy>=1.1.1,!=1.2" matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
             tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image git-archive-all wurlitzer \
-            sphinx sphinx_rtd_theme argh rstcheck mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx && \
+            sphinx sphinx_rtd_theme argh rstcheck mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx \
+            networkx pygraphviz && \
     python3 -m ipykernel install && \
     echo "backend: Agg" > /etc/matplotlibrc && \
     mkdir -p /root/.config/matplotlib/ && cp /etc/matplotlibrc /root/.config/matplotlib/ && \
@@ -43,4 +44,4 @@ RUN apt-get update && \
     apt-get clean && \
     cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2 | tar xj && \
     cd boost_1_68_0 && ./bootstrap.sh --prefix=/opt/boost_1_68_0 && ./b2 install >b2_build.log && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
