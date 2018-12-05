@@ -37,8 +37,9 @@ RUN apt-get update && \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
             tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image git-archive-all wurlitzer \
             sphinx sphinx_rtd_theme argh rstcheck mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx \
-            networkx pygraphviz py2cytoscape visJS2jupyter && \
+            networkx pygraphviz plotly && \
     python3 -m ipykernel install && \
+    python3 -m jupyter nbextension enable --py widgetsnbextension && \
     echo "backend: Agg" > /etc/matplotlibrc && \
     mkdir -p /root/.config/matplotlib/ && cp /etc/matplotlibrc /root/.config/matplotlib/ && \
     python3 -c "import matplotlib.pyplot as plt" && \
