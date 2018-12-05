@@ -30,18 +30,21 @@ RUN apt-get update && \
         clang-6.0 libllvm6.0 lldb-6.0 llvm-6.0 llvm-6.0-dev llvm-6.0-runtime clang-format-6.0 \
         python-clang-6.0 && \
     python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install http://hera.physchem.kth.se/~repo/616a6ebc248f81b461c0562aa942de37/nbconvert-ad27a93.tar.gz && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist \
             numpy numpydoc scipy statsmodels "sympy>=1.1.1,!=1.2" matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
             tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image git-archive-all wurlitzer \
             sphinx sphinx_rtd_theme argh rstcheck mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx \
-            networkx pygraphviz && \
+            networkx pygraphviz py2cytoscape visJS2jupyter && \
     python3 -m ipykernel install && \
     echo "backend: Agg" > /etc/matplotlibrc && \
     mkdir -p /root/.config/matplotlib/ && cp /etc/matplotlibrc /root/.config/matplotlib/ && \
     python3 -c "import matplotlib.pyplot as plt" && \
     apt-get clean && \
     cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2 | tar xj && \
-    cd boost_1_68_0 && ./bootstrap.sh --prefix=/opt/boost_1_68_0 && ./b2 install >b2_build.log && \
+    cd boost_1_68_0 && ./bootstrap.sh --prefix=/opt/boost_1_68_0 && ./b2 install >b2_build.log && tail b2_build.log && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
+
+# nbconvert-ad27a93.tar.gz: https://github.com/jupyter/nbconvert/archive/ad27a93e281f352d5516ab2441303623e7089e62.tar.gz
