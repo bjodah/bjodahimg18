@@ -13,8 +13,8 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get --assume-yes --no-install-recommends install wget curl ssh gnupg2 time sudo expect parallel zip unzip git \
     build-essential gfortran gfortran-8 gcc-8 g++-8 gdb valgrind scons libtool cmake flex bison binutils-dev \
-    libreadline6-dev libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
-    libssl-dev libgdbm-dev tk8.5-dev lzma lzma-dev libxslt1-dev libxml2-dev \
+    libreadline6-dev libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev lzma lzma-dev zstd libzstd-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
+    libssl-dev libgdbm-dev tk8.5-dev libxslt1-dev libxml2-dev \
     liblapack-dev libopenmpi-dev libgmp-dev libmpfr-dev libgsl-dev coinor-libipopt-dev \
     libboost-all-dev libsuitesparse-dev doxygen pandoc phantomjs \
     libjpeg-dev libpng-dev libfreetype6-dev libfontconfig1 fonts-dejavu fonts-humor-sans imagemagick ffmpeg \
@@ -46,4 +46,3 @@ RUN apt-get update && \
     cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2 | tar xj && \
     cd boost_1_69_0 && ./bootstrap.sh --prefix=/opt/boost_1_69_0 && ./b2 install >b2_build.log && tail b2_build.log && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
-
