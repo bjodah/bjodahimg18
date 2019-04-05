@@ -25,27 +25,25 @@ RUN apt-get update && \
     texlive-xetex biber graphviz libgraphviz-dev dot2tex dvipng latexmk \
     python3-dev python3-pip python3-setuptools python3-wheel && \
     wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add - && \
-    echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" | tee -a /etc/apt/sources.list && \
+    echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main" | tee -a /etc/apt/sources.list && \
     apt-get update && apt-get --quiet --assume-yes --no-install-recommends install \
-        clang-6.0 libllvm6.0 lldb-6.0 llvm-6.0 llvm-6.0-dev llvm-6.0-runtime clang-format-6.0 \
-        python-clang-6.0 && \
+        clang-8 libllvm8 lldb-8 llvm-8 llvm-8-dev llvm-8-runtime clang-format-8 \
+        python-clang-8 && \
     python3 -m pip install --upgrade pip setuptools wheel && \
-    python3 -m pip install http://hera.physchem.kth.se/~repo/616a6ebc248f81b461c0562aa942de37/nbconvert-ad27a93.tar.gz && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist \
             numpy numpydoc scipy statsmodels "sympy>=1.1.1,!=1.2" matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
             tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image git-archive-all wurlitzer \
-            sphinx sphinx_rtd_theme argh rstcheck mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx \
-            networkx pygraphviz plotly && \
+            sphinx sphinx_rtd_theme argh rstcheck check-manifest setuptools_scm mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx \
+            networkx pygraphviz plotly nbconvert && \
     python3 -m ipykernel install && \
     python3 -m jupyter nbextension enable --py widgetsnbextension && \
     echo "backend: Agg" > /etc/matplotlibrc && \
     mkdir -p /root/.config/matplotlib/ && cp /etc/matplotlibrc /root/.config/matplotlib/ && \
     python3 -c "import matplotlib.pyplot as plt" && \
     apt-get clean && \
-    cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2 | tar xj && \
-    cd boost_1_68_0 && ./bootstrap.sh --prefix=/opt/boost_1_68_0 && ./b2 install >b2_build.log && tail b2_build.log && \
+    cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2 | tar xj && \
+    cd boost_1_69_0 && ./bootstrap.sh --prefix=/opt/boost_1_69_0 && ./b2 install >b2_build.log && tail b2_build.log && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
 
-# nbconvert-ad27a93.tar.gz: https://github.com/jupyter/nbconvert/archive/ad27a93e281f352d5516ab2441303623e7089e62.tar.gz
