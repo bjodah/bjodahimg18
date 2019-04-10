@@ -56,7 +56,7 @@ RUN apt-get update && \
     cd /tmp && curl -Ls http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 | tar xj && cd eigen-* && mkdir build && cd build/ && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/eigen-3.3.7" .. && make install && \
     cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2 | tar xj && \
-    cd boost_1_69_0 && ./bootstrap.sh --prefix=/opt/boost_1_69_0 && ./b2 install >b2_build.log && tail b2_build.log && \
+    cd boost_1_69_0 && ./bootstrap.sh --with-python=python3 --prefix=/opt/boost_1_69_0 && ./b2 install && \
     cd /tmp && curl -Ls http://computation.llnl.gov/projects/sundials/download/sundials-4.1.0.tar.gz | tar xz && \
     mkdir /tmp/sundials_noklu_nolapack_extended && cd /tmp/sundials_noklu_nolapack_extended && CC=gcc-8 cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/sundials-4.1.0-noklu-nolapack-extended-int64" -DCMAKE_BUILD_TYPE:STRING="Release" -DBUILD_SHARED_LIBS:BOOL=ON -DBUILD_STATIC_LIBS:BOOL=OFF -DEXAMPLES_ENABLE_C:BOOL=OFF -DEXAMPLES_INSTALL:BOOL=OFF -DOPENMP_ENABLE:BOOL=OFF -DSUNDIALS_INDEX_SIZE=64 -DKLU_ENABLE:BOOL=OFF -DLAPACK_ENABLE:BOOL=OFF -DSUNDIALS_PRECISION:STRING="extended" ../sundials-4.1.0/ && make install && \
     mkdir /tmp/sundials_klu_lapack && cd /tmp/sundials_klu_lapack && CC=gcc-8 cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/sundials-4.1.0-klu-lapack" -DCMAKE_BUILD_TYPE:STRING="Release" -DBUILD_SHARED_LIBS:BOOL=ON -DBUILD_STATIC_LIBS:BOOL=OFF -DEXAMPLES_ENABLE_C:BOOL=OFF -DEXAMPLES_INSTALL:BOOL=OFF -DOPENMP_ENABLE:BOOL=OFF -DSUNDIALS_INDEX_SIZE=32 -DKLU_ENABLE:BOOL=ON -DLAPACK_ENABLE:BOOL=ON -DSUNDIALS_PRECISION:STRING="double" -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu ../sundials-4.1.0/ && make install && \
