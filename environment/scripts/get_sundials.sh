@@ -12,12 +12,11 @@ function quiet_unless_fail {
     #/bin/rm --force /tmp/suppress.out 2>/dev/null
     EXECMD=${1+"$@"}
     $EXECMD > ${OUTPUT_FILE} 2>&1
-    EXIT_CODE=$?
-    if [ ${EXIT_CODE} -ne 0 ]; then
+    EXIT_CODE_QUIET=$?
+    if [ ${EXIT_CODE_QUIET} -ne 0 ]; then
 	cat ${OUTPUT_FILE}
-	echo "The following command exited with exit status ${EXIT_CODE}: ${EXECMD}"
+	echo "The following command exited with exit status ${EXIT_CODE_QUIET}: ${EXECMD}"
 	/bin/rm ${OUTPUT_FILE}
-	exit $?
     fi
     /bin/rm ${OUTPUT_FILE}
 }
@@ -98,8 +97,9 @@ for URL in "${SUNDIALS_URLS[@]}"; do
 	    >&2 echo "Found incorrect RCONST(1) in source"
 	    exit 1;
 	fi
-        mkdir sundials_build
-        cd sundials_build
+        src_dir="$PWD/sundials-$VERSION"
+        tmp_bld_dir=$(mktemp -d); trap "{ rm -r $tmp_bld_dir; }" INT TERM EXIT
+        cd $tmp_bld_dir
 	( set -x; \
           cmake -DCMAKE_INSTALL_PREFIX:PATH="$PREFIX" \
 		-DCMAKE_BUILD_TYPE:STRING="Release" \
@@ -108,23 +108,25 @@ for URL in "${SUNDIALS_URLS[@]}"; do
 		-DEXAMPLES_ENABLE_C:BOOL=OFF \
 		-DEXAMPLES_INSTALL:BOOL=OFF \
 		-DOPENMP_ENABLE:BOOL=OFF \
-		"${@:3}" "../sundials-$VERSION/"
+		"${@:3}" "$src_dir"
 	)
 	if [[ $? -ne 0 ]]; then
 	    >&2 echo "Cmake configuration failed."
 	    exit 1
 	fi
         quiet_unless_fail make VERBOSE=1 -j 1
-        if [ $? -ne 0 ]; then
+        if [ $EXIT_CODE_QUIET -ne 0 ]; then
             >&2 echo "Building of sundials \"$VERSION\" failed."
             exit 1
         fi
         quiet_unless_fail make install
-        if [ $? -ne 0 ]; then
+        if [ $EXIT_CODE_QUIET -eq 0 ]; then
+            echo "Sundials installed to: $PREFIX"
+        else
             >&2 echo "Install of sundials \"$VERSION\" failed."
             exit 1
         fi
-        cd ..
+        cd -
         rm -r sundials*
         exit 0
     fi
