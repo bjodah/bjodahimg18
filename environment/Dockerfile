@@ -35,7 +35,7 @@ RUN apt-get update && \
     python3 -m pip install --upgrade pip setuptools wheel && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist \
-            numpy numpydoc scipy statsmodels "sympy>=1.1.1,!=1.2" matplotlib mpld3 jupyter ipython ipykernel \
+            numpy numpydoc scipy statsmodels "sympy>=1.4" pandas matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
             tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image git-archive-all wurlitzer \
             sphinx sphinx_rtd_theme argh rstcheck check-manifest setuptools_scm mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx \
@@ -65,5 +65,5 @@ RUN apt-get update && \
     CC=gcc-8 /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_TYPE="int32_t" && \
     CC=gcc-8 /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_SIZE=64 && \
     CC=gcc-8 /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_SIZE=64 && \
-    CC=gcc-8 /opt/get_sundials.sh 2.7.0 /opt/sundials-3.2.1-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_TYPE="int64_t" -DBUILD_ARKODE=OFF && \
+    CC=gcc-8 /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_TYPE="int64_t" -DBUILD_ARKODE=OFF && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
