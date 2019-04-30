@@ -1,16 +1,10 @@
 FROM ubuntu:bionic
 MAINTAINER Björn Dahlgren <bjodah@DELETEMEgmail.com>
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV DEBIAN_FRONTEND noninteractive
-ENV DEBCONF_NONINTERACTIVE_SEEN true
-
+ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
 COPY scripts/get_sundials.sh /opt/get_sundials.sh
-
 RUN apt-get update && \
-    apt-get --quiet --assume-yes install locales && \
-    locale-gen en_US.UTF-8 && \
+    apt-get --quiet --assume-yes --no-install-recommends install locales && \
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
     echo "path-exclude /usr/share/doc/*" >/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     echo "path-include /usr/share/doc/*/copyright" >>/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     apt-get upgrade -y && \
@@ -34,12 +28,12 @@ RUN apt-get update && \
         python-clang-8 && \
     python3 -m pip install --upgrade pip setuptools wheel && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython \
-            flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist \
+            flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist pytest-docstyle \
             numpy numpydoc scipy statsmodels "sympy>=1.4" pandas matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
             tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image git-archive-all wurlitzer \
             sphinx sphinx_rtd_theme argh rstcheck check-manifest setuptools_scm mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx \
-            networkx pygraphviz plotly nbconvert https://github.com/airspeed-velocity/asv/archive/d23bb8b74e8adacbfa3cf5724bda55fb39d56ba6.tar.gz && \
+            networkx pygraphviz plotly nbconvert https://github.com/airspeed-velocity/asv/archive/master.tar.gz && \
     python3 -m ipykernel install && \
     python3 -m jupyter nbextension enable --py widgetsnbextension && \
     echo "backend: Agg" > /etc/matplotlibrc && \
@@ -54,7 +48,7 @@ RUN apt-get update && \
     cd /tmp && curl -Ls https://github.com/USCiLab/cereal/archive/v1.2.2.tar.gz | tar xz -C /opt/ && \
     cd /tmp && curl -Ls https://github.com/msgpack/msgpack-c/releases/download/cpp-3.1.1/msgpack-3.1.1.tar.gz | tar xz && cd msgpack-* && mkdir build && cd build/ && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/msgpack-3.1.1" .. && make install && \
-    cd /tmp && curl -Ls https://github.com/abseil/abseil-cpp/archive/d902eb869bcfacc1bad14933ed9af4bed006d481.tar.gz | tar xz && cd abseil-cpp-* && mkdir build && cd build/ && \
+    cd /tmp && curl -Ls https://github.com/abseil/abseil-cpp/archive/cd86d0d20ab167c33b23d3875db68d1d4bad3a3b.tar.gz | tar xz && cd abseil-cpp-* && mkdir build && cd build/ && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/abseil-cpp-d902eb8" .. && make install && \
     cd /tmp && curl -Ls http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 | tar xj && cd eigen-* && mkdir build && cd build/ && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/eigen-3.3.7" .. && make install && \
