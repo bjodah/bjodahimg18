@@ -1,7 +1,6 @@
 FROM ubuntu:bionic
 MAINTAINER Björn Dahlgren <bjodah@DELETEMEgmail.com>
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8 DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
-COPY scripts/get_sundials.sh /opt/get_sundials.sh
 RUN apt-get update && \
     apt-get --quiet --assume-yes --no-install-recommends install locales && \
     localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
@@ -10,7 +9,7 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get --assume-yes --no-install-recommends install wget curl ssh gnupg2 time sudo expect parallel zip unzip git \
     build-essential gfortran gfortran-8 gcc-8 g++-8 gcc-8-multilib g++-8-multilib libc6-dev-i386 gdb valgrind scons libtool automake  cmake flex bison binutils-dev \
-    libreadline6-dev libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev lzma lzma-dev zstd libzstd-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
+    libgoogle-perftools-dev libreadline6-dev libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev lzma lzma-dev zstd libzstd-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
     libssl-dev libgdbm-dev tk8.5-dev libxslt1-dev libxml2-dev libgit2-dev emacs-nox \
     liblapack-dev libopenmpi-dev libgmp-dev libmpfr-dev libgsl-dev coinor-libipopt-dev \
     petsc-dev trilinos-dev libsuitesparse-dev doxygen pandoc phantomjs \
@@ -26,6 +25,8 @@ RUN apt-get update && \
     apt-get update && apt-get --quiet --assume-yes --no-install-recommends install \
         clang-8 libllvm8 lldb-8 llvm-8 llvm-8-dev llvm-8-runtime clang-format-8 \
         python-clang-8 && \
+    cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2 | tar xj && \
+    cd /tmp/boost_1_70_0 && echo "using gcc : 8.3 : /usr/bin/g++-8 ; " >> tools/build/src/user-config.jam && ./bootstrap.sh --with-python=python3 --prefix=/opt/boost_1_70_0 && ./b2 install && cd - && \
     python3 -m pip install --upgrade pip setuptools wheel && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist pytest-docstyle \
@@ -39,9 +40,11 @@ RUN apt-get update && \
     echo "backend: Agg" > /etc/matplotlibrc && \
     mkdir -p /root/.config/matplotlib/ && cp /etc/matplotlibrc /root/.config/matplotlib/ && \
     python3 -c "import matplotlib.pyplot as plt" && \
-    apt-get clean && \
-    cd /tmp && curl -Ls https://github.com/symengine/symengine/releases/download/v0.4.0/symengine-0.4.0.tar.gz | tar xz && cd symengine-0.4.0 && mkdir build && cd build && \
-    CC=gcc-8 CXX=g++-8 CMAKE_PREFIX_PATH=/usr/lib/llvm-8 cmake -DCMAKE_INSTALL_PREFIX=/opt/symengine-0.4.0 -DWITH_BFD=ON -DBUILD_SHARED_LIBS=ON -DWITH_LLVM=ON -DBUILD_TESTS=OFF -DBUILD_BENCHMARKS=OFF .. && make install && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
+COPY scripts/get_*.sh /opt/
+RUN export CPLUS_INCLUDE_PATH=/opt/boost_1_70_0/include && cd /tmp && \
+    CC=gcc-8   CXX=g++-8 CXXFLAGS="-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -fsized-deallocation" /opt/get_symengine.sh v0.4.0 /opt/symengine-0.4.0-dbg Debug   -DWITH_BFD=ON  -DINTEGER_CLASS=boostmp && \
+    CC=clang-8 CXX=clang++-8                                                                        /opt/get_symengine.sh v0.4.0 /opt/symengine-0.4.0-rel Release -DWITH_BFD=OFF -DWITH_TCMALLOC=ON && \
     curl -Ls https://github.com/catchorg/Catch2/releases/download/v2.7.2/catch.hpp -o /opt/catch2-2.7.2/include/catch.hpp --create-dirs && \
     curl -Ls https://github.com/catchorg/Clara/releases/download/v1.1.5/clara.hpp -o /opt/clara-1.1.5/include/clara.hpp --create-dirs && \
     curl -Ls https://github.com/nlohmann/json/releases/download/v3.6.1/json.hpp -o /opt/nlohmann_json-3.6.1/include/json.hpp --create-dirs && \
@@ -52,8 +55,6 @@ RUN apt-get update && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/abseil-cpp-d902eb8" .. && make install && \
     cd /tmp && curl -Ls http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 | tar xj && cd eigen-* && mkdir build && cd build/ && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/eigen-3.3.7" .. && make install && \
-    cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2 | tar xj && \
-    cd boost_1_70_0 && ./bootstrap.sh --with-python=python3 --prefix=/opt/boost_1_70_0 && ./b2 install && cd - && \
     CC=gcc-8 /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_SIZE=32 && \
     CC=gcc-8 /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_SIZE=32 && \
     CC=gcc-8 /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_TYPE="int32_t" && \
