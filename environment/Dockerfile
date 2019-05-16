@@ -8,8 +8,9 @@ RUN apt-get update && \
     echo "path-include /usr/share/doc/*/copyright" >>/etc/dpkg/dpkg.cfg.d/01_nodoc && \
     apt-get upgrade -y && \
     apt-get --assume-yes --no-install-recommends install wget curl rsync ssh gnupg2 time sudo expect parallel zip unzip git \
-    build-essential gfortran gfortran-8 gcc-8 g++-8 gcc-8-multilib g++-8-multilib libc6-dev-i386 gdb valgrind scons libtool automake  cmake flex bison binutils-dev \
-    libgoogle-perftools-dev libreadline6-dev libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev lzma lzma-dev zstd libzstd-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
+    build-essential gfortran gfortran-8 gcc-8 g++-8 gcc-8-multilib g++-8-multilib libc6-dev-i386 mingw-w64 wine-stable \
+    gdb valgrind scons libtool automake cmake flex bison binutils-dev libgoogle-perftools-dev \
+    libreadline6-dev libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev lzma lzma-dev zstd libzstd-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
     libssl-dev libgdbm-dev tk8.5-dev libxslt1-dev libxml2-dev libgit2-dev emacs-nox \
     liblapack-dev libopenmpi-dev libgmp-dev libmpfr-dev libgsl-dev coinor-libipopt-dev \
     petsc-dev trilinos-dev libsuitesparse-dev doxygen pandoc phantomjs \
