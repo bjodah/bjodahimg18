@@ -63,3 +63,9 @@ RUN export CPLUS_INCLUDE_PATH=/opt/boost_1_70_0/include && cd /tmp && \
     CC=gcc-8 /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_SIZE=64 && \
     CC=gcc-8 /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-noklu-nolapack-extended       -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DBUILD_ARKODE=OFF -DEXAMPLES_ENABLE=OFF && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
+
+RUN cd /tmp && export CC=gcc-8 && \
+    /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-noklu-nolapack-single-int32 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DSUNDIALS_INDEX_SIZE=32 && \
+    /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-noklu-nolapack-single-int32 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DSUNDIALS_INDEX_SIZE=32 && \
+    /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-noklu-nolapack-single       -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DBUILD_ARKODE=OFF -DEXAMPLES_ENABLE=OFF && \
+    rm -rf /tmp/*
