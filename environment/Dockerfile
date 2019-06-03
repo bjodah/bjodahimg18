@@ -32,7 +32,7 @@ RUN apt-get update && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist pytest-docstyle \
             numpy numpydoc scipy statsmodels "sympy>=1.4" pandas matplotlib mpld3 jupyter ipython ipykernel \
-            scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase \
+            scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase numericalunits \
             tqdm pyparsing ipywidgets pulp holoviews[recommended] cclib scikit-image git-archive-all wurlitzer \
             sphinx sphinx_rtd_theme argh rstcheck check-manifest setuptools_scm mako bottle sqlalchemy CherryPy Nikola[extras] nbsphinx \
             networkx pygraphviz plotly nbconvert https://github.com/airspeed-velocity/asv/archive/master.tar.gz && \
