@@ -43,17 +43,14 @@ RUN apt-get update && \
     python3 -c "import matplotlib.pyplot as plt" && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
 COPY scripts/get_*.sh /opt/
-RUN export CPLUS_INCLUDE_PATH=/opt/boost_1_70_0/include && cd /tmp && \
-    CC=gcc-8   CXX=g++-8 CXXFLAGS="-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -fsized-deallocation" /opt/get_symengine.sh v0.4.0 /opt/symengine-0.4.0-dbg Debug   -DWITH_BFD=ON  -DINTEGER_CLASS=boostmp && \
-    CC=clang-8 CXX=clang++-8                                                                        /opt/get_symengine.sh v0.4.0 /opt/symengine-0.4.0-rel Release -DWITH_BFD=OFF -DWITH_TCMALLOC=ON && \
-    curl -Ls https://github.com/catchorg/Catch2/releases/download/v2.7.2/catch.hpp -o /opt/catch2-2.7.2/include/catch.hpp --create-dirs && \
+RUN curl -Ls https://github.com/catchorg/Catch2/releases/download/v2.9.0/catch.hpp -o /opt/catch2-2.9.0/include/catch.hpp --create-dirs && \
     curl -Ls https://github.com/catchorg/Clara/releases/download/v1.1.5/clara.hpp -o /opt/clara-1.1.5/include/clara.hpp --create-dirs && \
     curl -Ls https://github.com/nlohmann/json/releases/download/v3.6.1/json.hpp -o /opt/nlohmann_json-3.6.1/include/json.hpp --create-dirs && \
     cd /tmp && curl -Ls https://github.com/USCiLab/cereal/archive/v1.2.2.tar.gz | tar xz -C /opt/ && \
-    cd /tmp && curl -Ls https://github.com/msgpack/msgpack-c/releases/download/cpp-3.1.1/msgpack-3.1.1.tar.gz | tar xz && cd msgpack-* && mkdir build && cd build/ && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/msgpack-3.1.1" .. && make install && \
-    cd /tmp && curl -Ls https://github.com/abseil/abseil-cpp/archive/cd86d0d20ab167c33b23d3875db68d1d4bad3a3b.tar.gz | tar xz && cd abseil-cpp-* && mkdir build && cd build/ && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/abseil-cpp-d902eb8" .. && make install && \
+    cd /tmp && curl -Ls https://github.com/msgpack/msgpack-c/releases/download/cpp-3.2.0/msgpack-3.2.0.tar.gz | tar xz && cd msgpack-* && mkdir build && cd build/ && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/msgpack-3.2.0" .. && make install && \
+    cd /tmp && curl -Ls https://github.com/abseil/abseil-cpp/archive/8f11724067248acc330b4d1f12f0c76d03f2cfb1.tar.gz | tar xz && cd abseil-cpp-* && mkdir build && cd build/ && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/abseil-cpp-8f11724" .. && make install && \
     cd /tmp && curl -Ls http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 | tar xj && cd eigen-* && mkdir build && cd build/ && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/eigen-3.3.7" .. && make install && \
     CC=gcc-8 /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_SIZE=32 && \
@@ -62,10 +59,7 @@ RUN export CPLUS_INCLUDE_PATH=/opt/boost_1_70_0/include && cd /tmp && \
     CC=gcc-8 /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_SIZE=64 && \
     CC=gcc-8 /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_SIZE=64 && \
     CC=gcc-8 /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-noklu-nolapack-extended       -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DBUILD_ARKODE=OFF -DEXAMPLES_ENABLE=OFF && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
-
-RUN cd /tmp && export CC=gcc-8 && \
     /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-noklu-nolapack-single-int32 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DSUNDIALS_INDEX_SIZE=32 && \
     /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-noklu-nolapack-single-int32 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DSUNDIALS_INDEX_SIZE=32 && \
     /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-noklu-nolapack-single       -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DBUILD_ARKODE=OFF -DEXAMPLES_ENABLE=OFF && \
-    rm -rf /tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
