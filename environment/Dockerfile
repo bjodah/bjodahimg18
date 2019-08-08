@@ -29,7 +29,7 @@ RUN apt-get update && \
     cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2 | tar xj && \
     cd /tmp/boost_1_70_0 && echo "using gcc : 8.3 : /usr/bin/g++-8 ; " >> tools/build/src/user-config.jam && ./bootstrap.sh --with-python=python3 --prefix=/opt/boost_1_70_0 && ./b2 install && cd - && \
     python3 -m pip install --upgrade pip setuptools wheel && \
-    python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython \
+    python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython pycparser \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist pytest-docstyle \
             numpy numpydoc scipy statsmodels "sympy>=1.4" pandas matplotlib mpld3 jupyter ipython ipykernel \
             scikit-optimize joblib toolz param quantities pylatex bokeh mogli xarray periodictable ase numericalunits \
@@ -43,14 +43,14 @@ RUN apt-get update && \
     python3 -c "import matplotlib.pyplot as plt" && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
 COPY scripts/get_*.sh /opt/
-RUN curl -Ls https://github.com/catchorg/Catch2/releases/download/v2.9.0/catch.hpp -o /opt/catch2-2.9.0/include/catch.hpp --create-dirs && \
+RUN curl -Ls https://github.com/catchorg/Catch2/releases/download/v2.9.2/catch.hpp -o /opt/catch2-2.9.2/include/catch.hpp --create-dirs && \
     curl -Ls https://github.com/catchorg/Clara/releases/download/v1.1.5/clara.hpp -o /opt/clara-1.1.5/include/clara.hpp --create-dirs && \
-    curl -Ls https://github.com/nlohmann/json/releases/download/v3.6.1/json.hpp -o /opt/nlohmann_json-3.6.1/include/json.hpp --create-dirs && \
+    curl -Ls https://github.com/nlohmann/json/releases/download/v3.7.0/json.hpp -o /opt/nlohmann_json-3.7.0/include/json.hpp --create-dirs && \
     cd /tmp && curl -Ls https://github.com/USCiLab/cereal/archive/v1.2.2.tar.gz | tar xz -C /opt/ && \
     cd /tmp && curl -Ls https://github.com/msgpack/msgpack-c/releases/download/cpp-3.2.0/msgpack-3.2.0.tar.gz | tar xz && cd msgpack-* && mkdir build && cd build/ && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/msgpack-3.2.0" .. && make install && \
-    cd /tmp && curl -Ls https://github.com/abseil/abseil-cpp/archive/8f11724067248acc330b4d1f12f0c76d03f2cfb1.tar.gz | tar xz && cd abseil-cpp-* && mkdir build && cd build/ && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/abseil-cpp-8f11724" .. && make install && \
+    cd /tmp && curl -Ls https://github.com/abseil/abseil-cpp/archive/20190808.tar.gz | tar xz && cd abseil-cpp-20190808 && mkdir build && cd build/ && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/abseil-cpp-20190808" .. && make install && \
     cd /tmp && curl -Ls http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 | tar xj && cd eigen-* && mkdir build && cd build/ && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/eigen-3.3.7" .. && make install && \
     CC=gcc-8 /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_SIZE=32 && \
