@@ -26,8 +26,8 @@ RUN apt-get update && \
     apt-get update && apt-get --quiet --assume-yes --no-install-recommends install \
         clang-8 libllvm8 lldb-8 llvm-8 llvm-8-dev llvm-8-runtime clang-format-8 \
         python-clang-8 libomp-8-dev && \
-    cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2 | tar xj && \
-    cd /tmp/boost_1_70_0 && echo "using gcc : 8.3 : /usr/bin/g++-8 ; " >> tools/build/src/user-config.jam && ./bootstrap.sh --with-python=python3 --prefix=/opt/boost_1_70_0 && ./b2 install && cd - && \
+    cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.bz2 | tar xj && \
+    cd /tmp/boost_1_71_0 && echo "using gcc : 8.3 : /usr/bin/g++-8 ; " >> tools/build/src/user-config.jam && ./bootstrap.sh --with-python=python3 --prefix=/opt/boost_1_71_0 && ./b2 install && cd - && \
     python3 -m pip install --upgrade pip setuptools wheel && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython pycparser \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist pytest-docstyle \

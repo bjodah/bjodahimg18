@@ -65,6 +65,10 @@ elif [[ "$VERSION" == "5.0.0-dev.0" ]]; then  # temporary
     SUNDIALS_MD5="1b27df035cc7a7b4b2e0a7920d9113b2"
     SUNDIALS_SHA256="241231b93c52579d7ded57016d621762ca6fd720bcdc995ee9b5dc743b215eed"
     SUNDIALS_URLS=( https://github.com/LLNL/sundials/releases/download/v5.0.0-dev.0/sundials-5.0.0-dev.0.tar.gz )
+elif [[ "$VERSION" == "5.0.0-dev.1" ]]; then
+    SUNDIALS_FNAME="sundials-5.0.0-dev.1.tar.gz"
+    SUNDIALS_MD5="a7eb1f28b556b9584c27ddb9ea04ba29"
+    SUNDIALS_SHA256="8c8e4fcb86497f8625b5dc38c9b6257c6e3097c472564436e2900de1d3d02206"
 else
     >&2 echo "Unknown sundials version \"$VERSION\""
 fi
