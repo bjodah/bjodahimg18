@@ -11,7 +11,7 @@ RUN apt-get update && \
     build-essential gfortran gfortran-8 gcc-8 g++-8 gcc-8-multilib g++-8-multilib libc6-dev-i386 mingw-w64 wine-stable \
     gdb valgrind scons libtool automake cmake flex bison binutils-dev libgoogle-perftools-dev lcov tree ninja-build \
     libreadline6-dev libyaml-dev libicu-dev zlib1g-dev libbz2-dev liblzma-dev lzma lzma-dev zstd libzstd-dev libncurses5-dev libsqlite3-dev libzmq3-dev \
-    libssl-dev libgdbm-dev tk8.5-dev libxslt1-dev libxml2-dev libgit2-dev emacs-nox \
+    libssl-dev libgdbm-dev tk8.5-dev libxslt1-dev libxml2-dev libgit2-dev emacs-nox libtool-bin uuid-dev libgdbm-dev tk-dev \
     liblapack-dev libopenmpi-dev libgmp-dev libmpfr-dev libgsl-dev coinor-libipopt-dev \
     petsc-dev trilinos-dev libsuitesparse-dev doxygen pandoc phantomjs \
     libjpeg-dev libpng-dev libfreetype6-dev libfontconfig1 fonts-dejavu fonts-humor-sans imagemagick inkscape ffmpeg \
@@ -26,8 +26,6 @@ RUN apt-get update && \
     apt-get update && apt-get --quiet --assume-yes --no-install-recommends install \
         clang-8 libllvm8 lldb-8 llvm-8 llvm-8-dev llvm-8-runtime clang-format-8 \
         python-clang-8 libomp-8-dev && \
-    cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.bz2 | tar xj && \
-    cd /tmp/boost_1_71_0 && echo "using gcc : 8.3 : /usr/bin/g++-8 ; " >> tools/build/src/user-config.jam && ./bootstrap.sh --with-python=python3 --prefix=/opt/boost_1_71_0 && ./b2 install && cd - && \
     python3 -m pip install --upgrade pip setuptools wheel && \
     python3 -m pip install setuptools wheel virtualenv future appdirs pybind11 cython pycparser \
             flake8 pytest pytest-pep8 pytest-cov pytest-flakes pytest-flake8 pytest-xdist pytest-docstyle \
@@ -42,24 +40,20 @@ RUN apt-get update && \
     mkdir -p /root/.config/matplotlib/ && cp /etc/matplotlibrc /root/.config/matplotlib/ && \
     python3 -c "import matplotlib.pyplot as plt" && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
-COPY scripts/get_*.sh /opt/
-RUN curl -Ls https://github.com/catchorg/Catch2/releases/download/v2.9.2/catch.hpp -o /opt/catch2-2.9.2/include/catch.hpp --create-dirs && \
-    curl -Ls https://github.com/catchorg/Clara/releases/download/v1.1.5/clara.hpp -o /opt/clara-1.1.5/include/clara.hpp --create-dirs && \
-    curl -Ls https://github.com/nlohmann/json/releases/download/v3.7.0/json.hpp -o /opt/nlohmann_json-3.7.0/include/json.hpp --create-dirs && \
-    cd /tmp && curl -Ls https://github.com/USCiLab/cereal/archive/v1.2.2.tar.gz | tar xz -C /opt/ && \
-    cd /tmp && curl -Ls https://github.com/msgpack/msgpack-c/releases/download/cpp-3.2.0/msgpack-3.2.0.tar.gz | tar xz && cd msgpack-* && mkdir build && cd build/ && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/msgpack-3.2.0" .. && make install && \
-    cd /tmp && curl -Ls https://github.com/abseil/abseil-cpp/archive/20190808.tar.gz | tar xz && cd abseil-cpp-20190808 && mkdir build && cd build/ && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/abseil-cpp-20190808" .. && make install && \
-    cd /tmp && curl -Ls http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 | tar xj && cd eigen-* && mkdir build && cd build/ && \
-    cmake -DCMAKE_INSTALL_PREFIX:PATH="/opt/eigen-3.3.7" .. && make install && \
+COPY scripts/*.* /opt/
+RUN CC=gcc-8 /opt/get_sundials.sh 5.1.0 /opt/sundials-5.1.0-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_SIZE=32 && \
     CC=gcc-8 /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_SIZE=32 && \
     CC=gcc-8 /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_SIZE=32 && \
     CC=gcc-8 /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-klu-lapack -DLAPACK_ENABLE=ON -DKLU_ENABLE=ON -DKLU_INCLUDE_DIR=/usr/include/suitesparse -DKLU_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu -DSUNDIALS_INDEX_TYPE="int32_t" && \
+    CC=gcc-8 /opt/get_sundials.sh 5.1.0 /opt/sundials-5.1.0-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_SIZE=64 && \
     CC=gcc-8 /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_SIZE=64 && \
     CC=gcc-8 /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-noklu-nolapack-extended-int64 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DSUNDIALS_INDEX_SIZE=64 && \
     CC=gcc-8 /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-noklu-nolapack-extended       -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="extended" -DBUILD_ARKODE=OFF -DEXAMPLES_ENABLE=OFF && \
+    /opt/get_sundials.sh 5.1.0 /opt/sundials-5.1.0-noklu-nolapack-single-int32 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DSUNDIALS_INDEX_SIZE=32 && \
     /opt/get_sundials.sh 4.1.0 /opt/sundials-4.1.0-noklu-nolapack-single-int32 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DSUNDIALS_INDEX_SIZE=32 && \
     /opt/get_sundials.sh 3.2.1 /opt/sundials-3.2.1-noklu-nolapack-single-int32 -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DSUNDIALS_INDEX_SIZE=32 && \
     /opt/get_sundials.sh 2.7.0 /opt/sundials-2.7.0-noklu-nolapack-single       -DLAPACK_ENABLE=OFF -DKLU_ENABLE=OFF -DSUNDIALS_PRECISION:STRING="single" -DBUILD_ARKODE=OFF -DEXAMPLES_ENABLE=OFF && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip
+RUN cd /tmp && curl -Ls https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.bz2 | tar xj  && \
+    cp /opt/boost172-rational-gh41.patch . && patch -p1 <boost172-rational-gh41.patch && cd boost_1_72_0 && echo "using gcc : 8.3 : /usr/bin/g++-8 ; " >> tools/build/src/user-config.jam && ./bootstrap.sh --with-python=python3 --prefix=/opt/boost_1_72_p && ./b2 install && \
+    rm -rf /tmp/*
